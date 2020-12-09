@@ -8,7 +8,7 @@ class RuntimeMode(ABC):
 
     def distribute_task(self, task_name: str, task_type: str, ts: int, duration: int) -> None:
         node_position = self.get_node_position_by_task_type(task_type)
-        self.node_and_task_container[task_type][node_position].addNewTask(task_name, task_type, ts, duration)
+        self.node_and_task_container[task_type][node_position].add_new_task(task_name, task_type, ts, duration)
 
     @abstractmethod
     def get_node_position_by_task_type(self, task_type: str) -> int:

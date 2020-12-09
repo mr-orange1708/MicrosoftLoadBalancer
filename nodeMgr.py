@@ -48,7 +48,7 @@ class NodeMgr():
             else:
                 current_task = self.get_next_task()
                 self.mutex.acquire()
-                print ("Executed task = " + current_task.task_name + ", type = " + current_task.task_type + ", on node = " + self.node_name + 
+                print("Executed task = " + current_task.task_name + ", type = " + current_task.task_type + ", on node = " + self.node_name + 
                     ", started at t = " + str(current_task.ts))
                 self.mutex.release()
                 time.sleep(current_task.duration)
