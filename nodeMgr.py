@@ -5,51 +5,51 @@ from threading import Thread, Lock
 
 class NodeMgr():
     class Task:
-        def __init__(self, taskName: str, taskType: str, ts: int, duration: int) -> None:
-            self.taskName = taskName
-            self.taskType = taskType
+        def __init__(self, task_name: str, task_type: str, ts: int, duration: int) -> None:
+            self.task_name = task_name
+            self.task_type = task_type
             self.ts = ts
             self.duration = duration
 
-    def __init__(self, nodeName: str, taskType: str) -> None:
-        self.nodeName = nodeName
-        self.taskType = taskType
-        self.continueRunning = True
+    def __init__(self, node_name: str, task_type: str) -> None:
+        self.node_name = node_name
+        self.task_type = task_type
+        self.continue_running = True
         self.mutex = Lock()
-        self.taskList = collections.deque()
-        self.thread = Thread(target = self.nodeRun)
+        self.task_list = collections.deque()
+        self.thread = Thread(target = self.node_run)
         self.thread.start()
 
-    def addNewTask(self, taskName: str, taskType: str, ts: int, duration: int) -> None:
-        newTask = self.Task(taskName, taskType, ts, duration)
+    def add_new_task(self, task_name: str, task_type: str, ts: int, duration: int) -> None:
+        new_task = self.Task(task_name, task_type, ts, duration)
         self.mutex.acquire()
-        self.taskList.append(newTask)
+        self.task_list.append(new_task)
         self.mutex.release()
     
-    def getNextTask(self) -> Task:
+    def get_next_task(self) -> Task:
         self.mutex.acquire()
-        retTask = self.taskList.popleft()
+        ret_task = self.task_list.popleft()
         self.mutex.release()
-        return retTask
+        return ret_task
 
-    def isTaskListEmpty(self) -> bool:
-        return len(self.taskList) == 0
+    def is_task_list_empty(self) -> bool:
+        return len(self.task_list) == 0
 
-    def stopRunning(self) -> None:
-        while not self.isTaskListEmpty():
+    def stop_running(self) -> None:
+        while not self.is_task_list_empty():
             time.sleep(5)
-        self.continueRunning = False
+        self.continue_running = False
         self.thread.join()
 
-    def nodeRun(self) -> None:
-        while self.continueRunning:
-            if (self.isTaskListEmpty()):
+    def node_run(self) -> None:
+        while self.continue_running:
+            if (self.is_task_list_empty()):
                 time.sleep(0.5)
             else:
-                currentTask = self.getNextTask()
+                current_task = self.get_next_task()
                 self.mutex.acquire()
-                print ("Executed task = " + currentTask.taskName + ", type = " + currentTask.taskType + ", on node = " + self.nodeName + 
-                    ", started at t = " + str(currentTask.ts))
+                print ("Executed task = " + current_task.task_name + ", type = " + current_task.task_type + ", on node = " + self.node_name + 
+                    ", started at t = " + str(current_task.ts))
                 self.mutex.release()
-                time.sleep(currentTask.duration)
+                time.sleep(current_task.duration)
 
