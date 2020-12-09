@@ -3,8 +3,8 @@ from loadBalancer import LoadBalancer
 
 
 def main():
-    nodeFilePath = None
-    taskFilePath = None
+    node_file_path = None
+    task_file_path = None
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--nodes_config_path", "-ncp", help = "set the nodes configuration file path")
@@ -12,13 +12,13 @@ def main():
     args = parser.parse_args()
 
     if args.nodes_config_path:
-        nodeFilePath = args.nodes_config_path
+        node_file_path = args.nodes_config_path
     else:
         print ("Missing nodes configuration file path")
         return
 
     if args.tasks_config_path:
-        taskFilePath = args.tasks_config_path
+        task_file_path = args.tasks_config_path
     else:
         print ("Missing tasks configuration file path")
         return
@@ -27,20 +27,20 @@ def main():
 #    taskFilePath = "c:\\Users\\טל\\Desktop\\MicrosoftLoadBalancer\\tasksConfig.txt"
 
 
-    loadBalancer = LoadBalancer()
-    retValue, retMessage = loadBalancer.read_nodes_from_file(nodeFilePath)
+    load_balancer = LoadBalancer()
+    ret_value, ret_message = load_balancer.read_nodes_from_file(node_file_path)
 
-    if retValue == False:
-        print (retMessage)
+    if ret_value == False:
+        print (ret_message)
         return
 
-    retValue, retMessage = loadBalancer.read_tasks_from_file(taskFilePath)
+    ret_value, ret_message = load_balancer.read_tasks_from_file(task_file_path)
 
-    if retValue == False:
-        print (retMessage)
+    if ret_value == False:
+        print (ret_message)
         return
 
-    loadBalancer.stop_running()
+    load_balancer.stop_running()
 
 
 if __name__=='__main__':
